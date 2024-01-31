@@ -46,6 +46,7 @@ if(isset($_GET['id_product'])){
         <h1><?= $finalProduct->getName() ?></h1>
         <h2><?= $finalProduct->getDescription() ?></h2>
         <h2><?= $finalProduct->getPrice() ?> €</h2>
+        <h3>Produit ajouté le : <?= $finalProduct->getCreatedAt()->format('d-m-Y') ?></h3>
     <?php else: ?>
         <h1>Le produit n'existe pas !</h1>
     <?php endif ?>

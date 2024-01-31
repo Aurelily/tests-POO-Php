@@ -5,14 +5,18 @@ session_start();
 
 use App\Model\Clothing;
 use App\Model\Electronic;
+/* use App\Model\Product; */
 
 
 $clothingModel = new Clothing;
 $electronicModel = new Electronic;
+/* $productModel = new Product(); */
 
 
 $clothings = $clothingModel->findAll();
 $electronics = $electronicModel->findAll();
+/* $products = $productModel->index(); */
+
 
 
 ?>

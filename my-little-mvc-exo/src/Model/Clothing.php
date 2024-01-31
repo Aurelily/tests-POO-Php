@@ -88,7 +88,7 @@ class Clothing extends AbstractProduct implements StockableInterface
     public function findOneById(int $id): static|false
     {
         $pdo = new \PDO('mysql:host=localhost;dbname=draft-shop', 'root', '');
-        $statement = $pdo->prepare('SELECT * FROM clothing INNER JOIN product ON clothing.product_id = product.id WHERE clothing.product_id = :id');
+        $statement = $pdo->prepare('SELECT * FROM clothing LEFT JOIN product ON clothing.product_id = product.id WHERE clothing.product_id = :id');
         $statement->bindValue(':id', $id, \PDO::PARAM_INT);
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
@@ -114,7 +114,7 @@ class Clothing extends AbstractProduct implements StockableInterface
     public function findAll(): array
     {
         $pdo = new \PDO('mysql:host=localhost;dbname=draft-shop', 'root', '');
-        $statement = $pdo->prepare('SELECT * FROM clothing INNER JOIN product ON clothing.product_id = product.id');
+        $statement = $pdo->prepare('SELECT * FROM clothing LEFT JOIN product ON clothing.product_id = product.id');
         $statement->execute();
         $results = $statement->fetchAll(\PDO::FETCH_ASSOC);
         $products = [];

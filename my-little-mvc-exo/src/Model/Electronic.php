@@ -92,7 +92,7 @@ class Electronic extends AbstractProduct implements StockableInterface
     {
         $pdo = new \PDO('mysql:host=localhost;dbname=draft-shop', 'root', '');
 
-        $statement = $pdo->prepare('SELECT * FROM electronic INNER JOIN product ON electronic.product_id = product.id');
+        $statement = $pdo->prepare('SELECT * FROM electronic LEFT JOIN product ON electronic.product_id = product.id');
 
         $statement->execute();
 
