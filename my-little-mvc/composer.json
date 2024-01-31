@@ -1,0 +1,9 @@
+{
+    "name": "nico-rvl/revisions-poo",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {}
+}

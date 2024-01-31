@@ -1,0 +1,8 @@
+# Ce htaccess est valable pour APACHE
+#-------------------------------------------
+
+# On démarre le moteur de réécriture d'URL
+RewriteEngine On
+
+# On réécrit l'URL avec un regex (le $1 renvoi au premier groupe d'écriture défini dans le regex entre ^et $)
+RewriteRule ^([a-zA-Z0-9\-\_\/]*)$ index.php?p=$1
