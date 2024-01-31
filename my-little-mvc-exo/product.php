@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 use App\Model\Clothing;
 use App\Model\Electronic;
@@ -38,9 +39,7 @@ if(isset($_GET['id_product'])){
 </head>
 <body>
     <header>
-        <nav>
-            <a href="shop.php"><button>La boutique</button></a>
-        </nav>
+        <?php include_once ('includeNav.php'); ?>
     </header>
     
     <?php if($finalProduct): ?>
@@ -50,5 +49,6 @@ if(isset($_GET['id_product'])){
     <?php else: ?>
         <h1>Le produit n'existe pas !</h1>
     <?php endif ?>
+    <a href="shop.php"><button>Retour à la boutique</button></a>
 </body>
 </html>

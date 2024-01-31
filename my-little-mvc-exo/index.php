@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 
 /* $clothing = new Clothing();
 $clothing->setSize('S');
@@ -28,10 +28,21 @@ $electronic->setCategoryId(8);
 $electronic->setCreatedAt(new DateTime());
 $electronic->setUpdatedAt(new DateTime());
 $electronic->create(); */
-
 ?>
 
-<nav>
-    <a href="shop.php"><button>La boutique</button></a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
+</head>
+<body>
+<header>
+    <?php include_once ('includeNav.php'); ?>
+</header>
+<main><h1>Page d'accueil du site</h1></main>
+    
+</body>
+</html>
 
-</nav>

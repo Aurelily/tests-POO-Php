@@ -27,6 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Appeler la méthode register avec les données du formulaire
     $authController->update($fullname, $email, $password);
+
+    // Mise à jour du user en SESSION
+    $userConnected->setFullname($fullname);
+    $userConnected->setEmail($email);
+    $userConnected->setPassword($password);
 }
 
 
@@ -40,7 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Profil</title>
 </head>
 <body>
-    
+    <header>
+        <?php include_once ('includeNav.php'); ?>
+    </header>
+
     <?php if($_SESSION['user']):?>
         <h1>Bienvenue dans votre profil <?= $userConnected->getFullname() ?></h1>
         <p>Fullname : <?= $userConnected->getFullname() ?></p>

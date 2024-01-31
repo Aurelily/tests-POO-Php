@@ -19,8 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $authController->login($email, $password);
 }
 
-if ($_SESSION['message']){
-    echo $_SESSION['message'];
+if ($_SESSION){
+    if ($_SESSION['message']){
+        echo $_SESSION['message'];
+    }
 }
 
 ?>
@@ -34,6 +36,11 @@ if ($_SESSION['message']){
     <title>Login</title>
 </head>
 <body>
+    
+    <header>
+        <?php include_once ('includeNav.php'); ?>
+    </header>
+        
     <h1>Se connecter</h1>
     <form action="" method="post">
     

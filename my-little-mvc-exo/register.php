@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 
 use App\Controller\AuthenticationController;
 
@@ -31,6 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Register</title>
 </head>
 <body>
+    <header>
+        <?php include_once ('includeNav.php'); ?>
+    </header>
+
     <h1>S'inscrire</h1>
     <form action="" method="post">
         <label for="fullname">Full Name:</label>

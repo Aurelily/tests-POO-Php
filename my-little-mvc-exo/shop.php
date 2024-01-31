@@ -26,6 +26,9 @@ $electronics = $electronicModel->findAll();
 </head>
 <body>
 
+<header>
+    <?php include_once ('includeNav.php'); ?>
+</header>
 
 <h1>Liste des produits de la boutique : Vêtements</h1>
 
