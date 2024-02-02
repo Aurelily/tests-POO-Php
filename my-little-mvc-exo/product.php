@@ -1,33 +1,15 @@
 <?php
-session_start();
 
-use App\Model\Clothing;
-use App\Model\Electronic;
+use App\Controller\ShopController;
 
 require_once 'vendor/autoload.php';
 
-if(isset($_GET['id_product'])){
+$shopController = new ShopController;
+$finalProduct = $shopController->showProduct($_GET['id_product']);
 
-    $idProduct = $_GET['id_product'];
-    $clothingModel = new Clothing;
-    $electronicModel = new Electronic;
-    $finalProduct = null;
+/* var_dump($_SESSION);
 
-    $clothingCheck = $clothingModel->findOneById($idProduct);
-    $electronicCheck = $electronicModel->findOneById($idProduct);
-
-    if($_GET['id_product']){
-        if($clothingCheck){
-            $finalProduct = $clothingCheck;
-            /* var_dump($clothingCheck); */
-        }else if ($electronicCheck){
-            $finalProduct = $electronicCheck;
-            /* var_dump($electronicCheck); */
-        }
-    }
-
-}
-
+var_dump($finalProduct); */
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +27,17 @@ if(isset($_GET['id_product'])){
     <?php if($finalProduct): ?>
         <h1><?= $finalProduct->getName() ?></h1>
         <h2><?= $finalProduct->getDescription() ?></h2>
-        <h2><?= $finalProduct->getPrice() ?> €</h2>
+        <h2>Prix : <?= $finalProduct->getPrice() ?> €</h2>
+       <hr> 
+            <?php if($_SESSION['type'] == "clothing"): ?>
+                <h2>Couleur : <?= $finalProduct->getColor() ?></h2>
+                <h3>Taille : <?= $finalProduct->getSize() ?></h3>
+                <h3>Type : <?= $finalProduct->getType() ?></h3>
+                <h3>Frais matériel : <?= $finalProduct->getMaterialFee() ?></h3>
+            <?php elseif($_SESSION['type'] ==    "electronic"): ?>
+                <h2>Marque : <?= $finalProduct->getBrand() ?></h2>
+                <h3>Frais de garantie : <?= $finalProduct->getWarantyFee() ?></h3>
+            <?php endif ?>
         <h3>Produit ajouté le : <?= $finalProduct->getCreatedAt()->format('d-m-Y') ?></h3>
     <?php else: ?>
         <h1>Le produit n'existe pas !</h1>

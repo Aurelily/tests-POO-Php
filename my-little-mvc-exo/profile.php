@@ -6,6 +6,7 @@ session_start();
 
 use App\Controller\AuthenticationController;
 
+/* var_dump($_SESSION); */
 
 if($_SESSION['user']){
     $userConnected = $_SESSION['user'];

@@ -10,6 +10,8 @@ use App\Controller\ShopController;
 $productModel = new Product;
 $productController= new ShopController;
 
+/* var_dump($_SESSION); */
+
 
 // On détermine sur quelle page on se trouve
     if(isset($_GET['page']) && !empty($_GET['page'])){

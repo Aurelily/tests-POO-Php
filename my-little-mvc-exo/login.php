@@ -1,9 +1,13 @@
 <?php
-session_start();
 
 use App\Controller\AuthenticationController;
 
 require_once 'vendor/autoload.php';
+
+session_start();
+
+/* var_dump($_SESSION); */
+
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -19,11 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $authController->login($email, $password);
 }
 
-if ($_SESSION){
-    if ($_SESSION['message']){
-        echo $_SESSION['message'];
-    }
-}
 
 ?>
 
@@ -38,9 +37,12 @@ if ($_SESSION){
 <body>
     
     <header>
-        <?php include_once ('includeNav.php'); ?>
+        <?php include ('includeNav.php'); ?>
     </header>
-        
+    <?php if(isset($_SESSION['message'])): ?>
+        <p><?= $_SESSION['message'] ?></p>
+    <?php endif ?>
+
     <h1>Se connecter</h1>
     <form action="" method="post">
     

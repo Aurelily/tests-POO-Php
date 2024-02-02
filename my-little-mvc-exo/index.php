@@ -4,6 +4,7 @@ require_once 'vendor/autoload.php';
 /* use App\Model\Electronic;
 use App\Model\Clothing; */
 
+
 // Démarrer la session si elle n'est pas déjà démarrée
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -11,8 +12,9 @@ if (session_status() == PHP_SESSION_NONE) {
     session_destroy();
 }
 
+/* var_dump($_SESSION); */
+
 if($_SESSION){
-    
     $userConnected = $_SESSION['user'];
 }
 
