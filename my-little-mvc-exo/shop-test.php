@@ -3,16 +3,14 @@
 require_once 'vendor/autoload.php';
 session_start();
 
-use App\Model\ConcreteProduct;
-
  // On détermine sur quelle page on se trouve
- if(isset($_GET['page']) && !empty($_GET['page'])){
-    $currentPage = (int) strip_tags($_GET['page']);
-}else{
-    $currentPage = 1;
-}
+    if(isset($_GET['page']) && !empty($_GET['page'])){
+        $currentPage = (int) strip_tags($_GET['page']);
+    }else{
+        $currentPage = 1;
+    }
 
-$pdo = new \PDO('mysql:host=localhost;dbname=draft-shop', 'root', '');  
+    $pdo = new \PDO('mysql:host=localhost;dbname=draft-shop', 'root', '');  
 
 // On détermine le nombre total d'articles
     $sql = 'SELECT COUNT(*) AS nb_articles FROM product;';
@@ -28,42 +26,43 @@ $pdo = new \PDO('mysql:host=localhost;dbname=draft-shop', 'root', '');
     $pages = ceil($nbArticles / $parPage);
 
 // Calcul le numéro du 1er article de la page
-$premier = ($currentPage * $parPage) - $parPage;
+    $premier = ($currentPage * $parPage) - $parPage;
 
 // On fait la requete qui recupère les produits avec la limit de pagination
-$statement = $pdo->prepare(
-    'SELECT * FROM product
-    LEFT JOIN electronic ON product.id = electronic.product_id
-    LEFT JOIN clothing ON product.id = clothing.product_id
-    LIMIT :premier, :parpage');
-        
-$statement->bindValue(':premier', $premier, \PDO::PARAM_INT);
-$statement->bindValue(':parpage', $parPage, \PDO::PARAM_INT);
+    $statement = $pdo->prepare(
+        'SELECT * FROM product
+        LEFT JOIN electronic ON product.id = electronic.product_id
+        LEFT JOIN clothing ON product.id = clothing.product_id
+        LIMIT :premier, :parpage');
+            
+    $statement->bindValue(':premier', $premier, \PDO::PARAM_INT);
+    $statement->bindValue(':parpage', $parPage, \PDO::PARAM_INT);
 
-$statement->execute();
-$results = $statement->fetchAll(\PDO::FETCH_ASSOC);
+    $statement->execute();
+    $results = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-$products = [];
+    $products = [];
 
-foreach ($results as $result) {
-    $products[] = new ConcreteProduct(
-        $result['id'],
-        $result['name'],
-        json_decode($result['photos']),
-        $result['price'],
-        $result['description'],
-        $result['quantity'],
-        $result['category_id'],
-        new \DateTime($result['created_at']),
-        $result['updated_at'] ? (new \DateTime($result['updated_at'])) : null,
-        $result['brand'],
-        $result['waranty_fee'],
-        $result['size'],
-        $result['color'],
-        $result['type'],
-        );
-    }
-var_dump($results);
+    foreach ($results as $result) {
+        array_push($products, [
+            'id' => $result['id'],
+            'name'=> $result['name'],
+            'photos' => json_decode($result['photos']),
+            'price' => $result['price'],
+            'description' => $result['description'],
+            'quantity' => $result['quantity'],
+            'category_id' => $result['category_id'],
+            'created_at' => new \DateTime($result['created_at']),
+            'updated_at' => $result['updated_at'] ? (new \DateTime($result['updated_at'])) : null,
+            'brand' => $result['brand'],
+            'waranty_fee' => $result['waranty_fee'],
+            'size' => $result['size'],
+            'color' => $result['color'],
+            'type' => $result['type']
+        ]);
+    };
+
+    /* var_dump($products); */
 ?>
 
 <!DOCTYPE html>
@@ -84,8 +83,9 @@ var_dump($results);
 <?php foreach($products as $product): ?>
 
     <article>
-    <h2><a href="product.php?id_product=<?= $product->getId()?>"><?= $product->getName()?></a></h2>
-    <p><?= $product->getDescription() ?></p>
+    <h2><a href="product.php?id_product=<?= $product['id']?>"><?= $product['name']?></a></h2>
+    <p><?= $product['description'] ?></p>
+    <p><?= $product['color'] ?></p>
     
     </article>
 
@@ -94,7 +94,7 @@ var_dump($results);
     <nav>
         
             <!-- Lien vers la page précédente (désactivé si on se trouve sur la 1ère page) -->
-            <button <?= ($currentPage == 1) ? "disabled" : "" ?>>
+            <button <?= ($currentPage == 1) ? "style='display:none'" : "" ?>>
                 <a href="shop-test.php?page=<?= $currentPage - 1 ?>" class="page-link">Précédente</a>
             </button>
 
@@ -106,7 +106,7 @@ var_dump($results);
             <?php endfor ?>
 
             <!-- Lien vers la page suivante (désactivé si on se trouve sur la dernière page) -->
-            <button <?= ($currentPage == $pages) ? "disabled" : "" ?>>
+            <button <?= ($currentPage == $pages) ? "style='display:none'" : "" ?>>
             <a href="shop-test.php?page=<?= $currentPage + 1 ?>" class="page-link">Suivante</a>
             </button>
        

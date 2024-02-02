@@ -6,64 +6,53 @@ use App\Model\Abstract\AbstractProduct;
 
 class Product extends AbstractProduct{
 
-    public function findPaginated($currentPage){
+// Fonction qui compte le nombre de produits dans la BDD
+// ---------------------------------------------------------
 
-        $pdo = new \PDO('mysql:host=localhost;dbname=draft-shop', 'root', '');
+    public function countProducts():int{
 
+        $pdo = new \PDO('mysql:host=localhost;dbname=draft-shop', 'root', '');  
 
-        // On détermine le nombre total d'articles
-        $sql = 'SELECT COUNT(*) AS nb_articles FROM product;';
+// On détermine le nombre total d'articles
+        $sql = 'SELECT COUNT(*) AS nb_products FROM product;';
         $query = $pdo->prepare($sql);
         $query->execute();
-
-        // On récupère le nombre d'articles
         $resultCount = $query->fetch();
-        $nbArticles = (int) $resultCount['nb_articles'];
+        $nbProducts = (int) $resultCount['nb_products'];
 
-        // On détermine le nombre d'articles par page
-        $parPage = 5;
+        return $nbProducts;
+    }
 
-        // On calcule le nombre de pages total (ceil : arrondi au nombre supérieur)
-        $pages = ceil($nbArticles / $parPage);
+// Fonction qui va chercher les produits et mets en place la pagination
+// ---------------------------------------------------------
 
-        // Calcul du 1er article de la page
+    public function findPaginated($currentPage, $parPage){
+
+        $pdo = new \PDO('mysql:host=localhost;dbname=draft-shop', 'root', '');  
+
+/* // On détermine le nombre d'articles que je veux par page
+        $parPage = 5; */
+
+// Calcul le numéro du 1er article de la page
         $premier = ($currentPage * $parPage) - $parPage;
 
-        // On fait la requete avec la pagination
+// On fait la requete qui recupère les produits avec la limit de pagination
+// NOTE : J'aurais pu mettre ça :  'SELECT p.*, e.*, c.* si je n'avais pas appelé l'id principal de toutes les tables avec le même nom "id"
         $statement = $pdo->prepare(
-            'SELECT * FROM product
-            LEFT JOIN electronic ON product.id = electronic.product_id
-            LEFT JOIN clothing ON product.id = clothing.product_id
-            DESC LIMIT :premier, :parpage');
-        
+            'SELECT p.*, e.brand, e.waranty_fee, c.type, c.size,c.color
+            FROM product as p
+            LEFT JOIN electronic as e ON p.id = e.product_id
+            LEFT JOIN clothing as c ON p.id = c.product_id
+            LIMIT :premier, :parpage');
+  
+                
         $statement->bindValue(':premier', $premier, \PDO::PARAM_INT);
         $statement->bindValue(':parpage', $parPage, \PDO::PARAM_INT);
 
         $statement->execute();
         $results = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        $products = [];
-
-        foreach ($results as $result) {
-            $products[] = new static(
-                $result['id'],
-                $result['name'],
-                json_decode($result['photos']),
-                $result['price'],
-                $result['description'],
-                $result['quantity'],
-                $result['category_id'],
-                new \DateTime($result['created_at']),
-                $result['updated_at'] ? (new \DateTime($result['updated_at'])) : null,
-                $result['brand'],
-                $result['waranty_fee'],
-                $result['size'],
-                $result['color'],
-                $result['type'],
-            );
-        }
-
-        return $products;
+        
+        return $results;
 
     }
 }
