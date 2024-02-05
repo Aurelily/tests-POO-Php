@@ -28,7 +28,7 @@ var_dump($finalProduct); */
         <h1><?= $finalProduct->getName() ?></h1>
         <h2><?= $finalProduct->getDescription() ?></h2>
         <h2>Prix : <?= $finalProduct->getPrice() ?> €</h2>
-       <hr> 
+        <hr> 
             <?php if($_SESSION['type'] == "clothing"): ?>
                 <h2>Couleur : <?= $finalProduct->getColor() ?></h2>
                 <h3>Taille : <?= $finalProduct->getSize() ?></h3>
